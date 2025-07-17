@@ -7,6 +7,7 @@ import (
 	"io"
 	"os"
 	"regexp"
+	"strings"
 )
 
 type User struct {
@@ -29,9 +30,6 @@ func FastSearch(out io.Writer) {
 
 	scanner := bufio.NewScanner(file)
 
-	reAndroid := regexp.MustCompile("Android")
-	reMSIE := regexp.MustCompile("MSIE")
-
 	i := 0
 
 	for scanner.Scan() {
@@ -50,7 +48,7 @@ func FastSearch(out io.Writer) {
 		browsers := user.Browsers
 
 		for _, browser := range browsers {
-			if reAndroid.MatchString(browser) {
+			if strings.Contains(browser, "Android") {
 				isAndroid = true
 				notSeenBefore := true
 				for _, item := range seenBrowsers {
@@ -66,7 +64,7 @@ func FastSearch(out io.Writer) {
 		}
 
 		for _, browser := range browsers {
-			if reMSIE.MatchString(browser) {
+			if strings.Contains(browser, "MSIE") {
 				isMSIE = true
 				notSeenBefore := true
 				for _, item := range seenBrowsers {
