@@ -57,24 +57,26 @@ func JoinAndFilter(list []UserXML, query string) []User {
 func Sort(users *[]User, orderField string, orderBy int) {
 	if orderBy != 0 {
 		sort.Slice(*users, func(i, j int) bool {
-			ui := reflect.ValueOf((*users)[i]).FieldByName(orderField)
-			uj := reflect.ValueOf((*users)[j]).FieldByName(orderField)
 
-			if !ui.IsValid() || !uj.IsValid() {
-				return false
-			}
+			ui := (*users)[i]
+			uj := (*users)[j]
 
-			switch ui.Kind() {
-			case reflect.Int:
+			switch orderField {
+			case "Name":
 				if orderBy > 0 {
-					return ui.Int() > uj.Int()
+					return ui.Name > uj.Name
 				}
-				return ui.Int() < uj.Int()
-			case reflect.String:
+				return ui.Name < uj.Name
+			case "About":
 				if orderBy > 0 {
-					return ui.String() > uj.String()
+					return ui.About > uj.About
 				}
-				return ui.String() < uj.String()
+				return ui.About < uj.About
+			case "Id":
+				if orderBy > 0 {
+					return ui.Id > uj.Id
+				}
+				return ui.Id < uj.Id
 			default:
 				return false
 			}
