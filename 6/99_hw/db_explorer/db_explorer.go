@@ -246,7 +246,7 @@ func (h *Handler) GetRow(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	if len(result) < 1 {
+	if len(result) == 0 {
 		h.fail(w, http.StatusNotFound, "record not found")
 		return
 	}
@@ -426,6 +426,9 @@ func (h *Handler) Init() {
 			var nullable bool
 			if nullStr.String == "YES" {
 				nullable = true
+			}
+			if strings.Contains(typ, "int") {
+				typ = "int"
 			}
 			cTable.Columns[field] = Column{Name: field, Type: typ, Nullable: nullable}
 		}
